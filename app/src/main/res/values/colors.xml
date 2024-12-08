@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde100">#FF589E49</color>
+    <color name="blanco">#FFFFFFFF</color>
+    <color name="negro">#FF000000</color>
+    <color name="verde60">#1f7f15</color>
+    <color name="verde50">#3c9a2f</color>
+    <color name="verde40">#58b448</color>
+    <color name="verde30">#75cf62</color>
+    <color name="verde20">#92ea7c</color>
+    <color name="verde10">#E4EEE2</color>
+    <color name="negro10">#c2c2c2</color>
+    <color name="rojo10">#e64529</color>
+    <color name="rojo20">#c4341f</color>
+    <color name="rojo30">#a12215</color>
+    <color name="rojo40">#7f110a</color>
+    <color name="rojo50">#5c0000</color>
+
+</resources>
