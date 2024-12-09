@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.statusBarColor = resources.getColor(R.color.negro)
+        window.statusBarColor = resources.getColor(R.color.negro100)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

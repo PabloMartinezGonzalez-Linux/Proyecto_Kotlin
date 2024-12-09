@@ -10,17 +10,27 @@ class CardAdapter(
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CardItem, position: Int) {
-            binding.productImage.setImageResource(item.imageRes)
+        fun bind(item: CardItem) {
+            // Mostrar la imagen de fondo
+            binding.bgCard.setImageResource(item.bgImageRes)
+
+            // Mostrar la imagen seleccionada o el recurso por defecto
+            if (item.imageUri != null) {
+                binding.productImage.setImageURI(item.imageUri)
+            } else {
+                item.imageRes?.let { binding.productImage.setImageResource(it) }
+            }
+
             binding.Marca.text = item.brand
             binding.Modelo.text = item.model
 
-            // Al hacer clic en la tarjeta, abrir el diálogo para editar
+            // Abrir diálogo al hacer clic
             binding.root.setOnClickListener {
                 onItemEdit(adapterPosition)
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,10 +38,9 @@ class CardAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(items[position], position)
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size
 }
-
 

@@ -14,7 +14,7 @@ class Login : AppCompatActivity() {
     private val contrasenna = "pablo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.statusBarColor = resources.getColor(R.color.negro)
+        window.statusBarColor = resources.getColor(R.color.negro100)
         super.onCreate(savedInstanceState)
         binding = LoginBinding.inflate(layoutInflater)
         setContentView(binding.root)

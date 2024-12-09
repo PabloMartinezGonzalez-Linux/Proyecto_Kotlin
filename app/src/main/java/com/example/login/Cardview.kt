@@ -19,17 +19,12 @@ class Cardview : AppCompatActivity() {
         binding = ActivityRecyclerviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window.statusBarColor = resources.getColor(R.color.negro100)
+
         // Agregar tarjetas iniciales
         cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))
         cardItems.add(CardItem(R.drawable.img_1, "YAMAHA", "555"))
-        cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))
-        cardItems.add(CardItem(R.drawable.img_1, "YAMAHA", "555"))
-        cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))
-        cardItems.add(CardItem(R.drawable.img_1, "YAMAHA", "555"))
-        cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))
-        cardItems.add(CardItem(R.drawable.img_1, "YAMAHA", "555"))
-        cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))
-        cardItems.add(CardItem(R.drawable.img_1, "YAMAHA", "555"))
+        // ...
 
         // Configurar el adaptador
         adapter = CardAdapter(cardItems) { position ->
@@ -54,12 +49,20 @@ class Cardview : AppCompatActivity() {
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+
+        // Configurar el botón para añadir nueva tarjeta
+        binding.addCardButton.setOnClickListener {
+            val dialogFragment = EditCardDialogFragment(null, cardItems) { newCard ->
+                // Añadir la tarjeta a la lista
+                cardItems.add(newCard)
+                adapter.notifyItemInserted(cardItems.size - 1)
+            }
+            dialogFragment.show(supportFragmentManager, "AddCardDialog")
+        }
     }
 
-    // Mostrar el diálogo para editar una tarjeta
     private fun editCard(position: Int) {
         val dialogFragment = EditCardDialogFragment(position, cardItems) { updatedCard ->
-            // Actualizar la tarjeta con los nuevos valores
             cardItems[position] = updatedCard
             adapter.notifyItemChanged(position)
         }
