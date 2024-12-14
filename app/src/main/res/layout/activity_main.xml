@@ -30,7 +30,7 @@
         android:layout_height="50dp"
         android:text="Log in"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.88"
+        app:layout_constraintVertical_bias="0.91"
         app:layout_constraintHorizontal_bias="0.5"
         android:width="300dp"
         android:backgroundTint="@color/verde100"
@@ -39,31 +39,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txt_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿No tienes cuenta?"
-        app:layout_constraintHorizontal_bias="0.32"
-        app:layout_constraintVertical_bias="0.2"
-        android:textColor="@color/blanco"
-        app:layout_constraintBottom_toBottomOf="@+id/gradient_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btt_log" />
-
-
-    <TextView
-        android:id="@+id/txt2_log"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Registrate"
-        android:textColor="@color/verde100"
-        app:layout_constraintBottom_toBottomOf="@+id/gradient_bg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintStart_toEndOf="@+id/txt_log"
-        app:layout_constraintTop_toBottomOf="@+id/btt_log" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

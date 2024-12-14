@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="470dp"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -38,11 +38,11 @@
 
             <EditText
                 android:textCursorDrawable="@null"
-                android:id="@+id/user_txt"
+                android:id="@+id/email"
                 android:layout_width="220dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:hint="Usuario"
+                android:hint="Email"
                 android:textColorHint="@color/negro10"
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
@@ -51,7 +51,7 @@
 
             <EditText
                 android:textCursorDrawable="@null"
-                android:id="@+id/pswd_txt"
+                android:id="@+id/pass"
                 android:layout_width="220dp"
                 android:layout_gravity="center"
                 android:layout_height="50dp"
@@ -63,18 +63,53 @@
                 android:backgroundTint="@color/negro10"
                 android:textColor="@color/negro100"/>
 
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="220dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log in"
-                android:padding="15dp"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="10dp"
-                android:backgroundTint="@color/verde100"
+                >
+
+                <Button
+                    android:id="@+id/loginButton"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Log in"
+                    android:padding="15dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:backgroundTint="@color/verde100"
                 android:textColor="@android:color/white" />
 
+                <Button
+                    android:id="@+id/registerButton"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:text="Register"
+                    android:padding="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:backgroundTint="@color/verde70"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/resetPass"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:text="Reset Password"
+                android:padding="15dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/gris50"
+                android:textColor="@android:color/white" />
 
 
         </LinearLayout>

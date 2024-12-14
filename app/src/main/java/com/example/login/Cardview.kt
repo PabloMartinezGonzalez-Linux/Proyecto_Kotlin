@@ -1,12 +1,15 @@
 package com.example.login
 
 import CardAdapter
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.databinding.ActivityRecyclerviewBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 class Cardview : AppCompatActivity() {
 
@@ -59,6 +62,23 @@ class Cardview : AppCompatActivity() {
             }
             dialogFragment.show(supportFragmentManager, "AddCardDialog")
         }
+
+        binding.logOut.setOnClickListener {
+            // Cerrar sesión en Firebase
+            FirebaseAuth.getInstance().signOut()
+
+            // Limpiar las SharedPreferences
+            val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.clear()
+            editor.apply()
+
+            // Redirigir al Login
+            val intent = Intent(this, Login::class.java)
+            startActivity(intent)
+            finish() // Finalizar la actividad actual
+        }
+
     }
 
     private fun editCard(position: Int) {
