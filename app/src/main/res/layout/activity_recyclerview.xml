@@ -1,78 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".Cardview">
 
-    <!-- Contenido Principal -->
-    <LinearLayout
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/verde10">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
-        <!-- Toolbar -->
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/verde100"
-            android:title="Mis Tarjetas"
-            android:titleTextColor="@android:color/white"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <!-- Contenido del Activity (RecyclerView y botones) -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Contenido Principal -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:background="@color/verde10">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <!-- Toolbar -->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="550dp"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/addCardButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/item_card" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/verde100"
+                android:title="Mis Tarjetas"
+                android:titleTextColor="@android:color/white"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <Button
-                android:id="@+id/addCardButton"
+            <!-- Contenedor de los Fragments -->
+            <FrameLayout
+                android:id="@+id/fragmentContainer"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:backgroundTint="@color/verde100"
-                android:text="Añadir"
-                android:textColor="@color/blanco"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.482"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/blanco"/>
+        </LinearLayout>
 
+        <!-- Navigation Drawer -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/menu"
+            app:headerLayout="@layout/header" />
+    </androidx.drawerlayout.widget.DrawerLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
-
-    <!-- Navigation Drawer -->
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/menu"
-        app:headerLayout="@layout/header" />
-
-
-
-</androidx.drawerlayout.widget.DrawerLayout>
-
-
-
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/menu_abajo"
+        android:background="@color/verde70"/>
+</LinearLayout>
