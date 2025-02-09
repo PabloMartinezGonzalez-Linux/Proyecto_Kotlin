@@ -21,11 +21,9 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         binding = ActivityRecyclerviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configurar Toolbar
         setSupportActionBar(binding.toolbar)
         binding.toolbar.setTitleTextColor(resources.getColor(android.R.color.white))
 
-        // Configurar DrawerLayout y NavigationView
         val drawerToggle = ActionBarDrawerToggle(
             this,
             binding.drawerLayout,
@@ -36,12 +34,10 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         binding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        // 🔥 Cambiar color de las tres líneas del menú lateral a blanco
         drawerToggle.drawerArrowDrawable.color = resources.getColor(R.color.blanco)
 
         binding.navigationView.setNavigationItemSelectedListener(this)
 
-        // 🔥 Cargar el fragmento de inicio solo si no hay otro guardado
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment()) // Cargar MotosFragment como pantalla principal
             binding.navigationView.setCheckedItem(R.id.nav_home) // Marcar Home como seleccionado
@@ -49,7 +45,6 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                 R.id.bottom_profile // Marcar "Motos" en BottomNavigation
         }
 
-        // 🔥 Configurar BottomNavigationView con Logout
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> replaceFragment(AnunciosFragment()) // Cambia a AnunciosFragment
@@ -68,7 +63,6 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             R.id.nav_logout -> logout() // 🔥 Cerrar sesión
         }
 
-        // Cerrar el Navigation Drawer después de seleccionar una opción
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

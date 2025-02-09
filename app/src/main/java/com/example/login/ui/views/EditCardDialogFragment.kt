@@ -14,8 +14,7 @@ import com.example.login.databinding.DialogOptionsBinding
 import com.example.login.domain.models.CardItem
 
 class EditCardDialogFragment(
-    private val position: Int?, // Ahora es un parámetro opcional
-    private val cardItems: MutableList<CardItem>,
+    private val initialCard: CardItem?,
     private val onSave: (CardItem) -> Unit
 ) : DialogFragment() {
 
@@ -30,21 +29,17 @@ class EditCardDialogFragment(
     ): View {
         binding = DialogOptionsBinding.inflate(inflater, container, false)
 
-        // Si hay una posición válida, editamos la tarjeta existente; si no, creamos una nueva
-        cardItem = if (position != null && position >= 0) {
-            cardItems[position]
-        } else {
-            CardItem(imageRes = R.drawable.img_1, brand = "", model = "")
-        }
+        cardItem = initialCard ?: CardItem(imageRes = R.drawable.img_1, brand = "", model = "")
 
-        // Prellenar los campos si estamos editando una tarjeta
         cardItem?.let {
             binding.etMarca.setText(it.brand)
             binding.etModelo.setText(it.model)
-            it.imageUri?.let { binding.ivImage.setImageURI(it) }
-                ?: it.imageRes?.let { binding.ivImage.setImageResource(it) }
+            it.imageUri?.let { uri ->
+                binding.ivImage.setImageURI(uri)
+            } ?: it.imageRes?.let { res ->
+                binding.ivImage.setImageResource(res)
+            }
             selectedBackgroundRes = it.bgImageRes
-            // Configurar el fondo
             when (selectedBackgroundRes) {
                 R.drawable.bg_rojo -> binding.backgroundSelector.check(R.id.rbRed)
                 R.drawable.bg_azul -> binding.backgroundSelector.check(R.id.rbBlue)
@@ -53,7 +48,6 @@ class EditCardDialogFragment(
             }
         }
 
-        // Configurar RadioGroup para el fondo
         binding.backgroundSelector.setOnCheckedChangeListener { _, checkedId ->
             selectedBackgroundRes = when (checkedId) {
                 R.id.rbRed -> R.drawable.bg_rojo
@@ -63,24 +57,21 @@ class EditCardDialogFragment(
             }
         }
 
-        // Cambiar imagen
         binding.btnChangeImage.setOnClickListener {
             openImagePicker()
         }
 
-        // Guardar cambios
         binding.btnSave.setOnClickListener {
             val brand = binding.etMarca.text.toString()
             val model = binding.etModelo.text.toString()
 
-            // Si estamos editando, actualizamos; si estamos creando, agregamos
             val newCard = cardItem?.apply {
                 this.imageUri = selectedImageUri
                 this.brand = brand
                 this.model = model
                 this.bgImageRes = selectedBackgroundRes
             } ?: CardItem(
-                imageRes = R.drawable.img_1, // Imagen predeterminada
+                imageRes = R.drawable.img_1,
                 brand = brand,
                 model = model,
                 imageUri = selectedImageUri,
@@ -105,7 +96,7 @@ class EditCardDialogFragment(
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_IMAGE_PICKER) {
             data?.data?.let { uri ->
                 selectedImageUri = uri
-                binding.ivImage.setImageURI(uri) // Actualizar previsualización en el diálogo
+                binding.ivImage.setImageURI(uri)
             }
         }
     }
@@ -114,5 +105,3 @@ class EditCardDialogFragment(
         private const val REQUEST_IMAGE_PICKER = 1001
     }
 }
-
-

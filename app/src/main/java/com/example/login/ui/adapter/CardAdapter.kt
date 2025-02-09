@@ -7,7 +7,7 @@ import com.example.login.databinding.ItemCardBinding
 import com.example.login.domain.models.CardItem
 
 class CardAdapter(
-    private val items: List<CardItem>,
+    private var items: List<CardItem>,
     private val onClick: (Int) -> Unit
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
@@ -32,4 +32,9 @@ class CardAdapter(
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateList(newItems: List<CardItem>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }
