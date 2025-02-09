@@ -1,8 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Login" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Personaliza el color principal -->
+        <item name="colorPrimary">@color/verde100</item>
+        <item name="colorOnPrimary">@color/blanco</item>
+        <item name="colorOnSecondary">@color/blanco</item>
+        <item name="colorOnTertiary">@color/blanco</item>
+        <item name="colorPrimaryVariant">@color/verde70</item>
+        <item name="colorSecondary">@color/verde50</item>
+        <item name="colorTertiary">@color/verde30</item>
+
+        <!-- Color de la barra de estado -->
+        <item name="android:statusBarColor">@color/verde70</item>
+
+        <!-- Color de fondo -->
+        <item name="android:windowBackground">@color/blanco</item>
     </style>
 
     <style name="Theme.Login" parent="Base.Theme.Login" />

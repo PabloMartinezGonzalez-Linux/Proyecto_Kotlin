@@ -1,6 +1,5 @@
-package com.example.login
+package com.example.login.ui.views
 
-import CardAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.login.databinding.FragmentAnunciosBinding
+import com.example.login.R
+import com.example.login.databinding.FragmentHomeBinding
+import com.example.login.domain.models.CardItem
+import com.example.login.ui.adapter.CardAdapter
 
-class AnunciosFragment : Fragment() {
+class HomeFragment : Fragment() {
 
-    private lateinit var binding: FragmentAnunciosBinding
+    private lateinit var binding: FragmentHomeBinding
     private val cardItems = mutableListOf<CardItem>()
     private lateinit var adapter: CardAdapter
 
@@ -21,7 +23,7 @@ class AnunciosFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAnunciosBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Configurar RecyclerView
         cardItems.add(CardItem(R.drawable.img_1, "KAWASAKI", "777"))

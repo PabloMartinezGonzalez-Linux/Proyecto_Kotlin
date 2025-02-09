@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.ui.views
 
 import android.app.Activity
 import android.content.Intent
@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.example.login.R
 import com.example.login.databinding.DialogOptionsBinding
+import com.example.login.domain.models.CardItem
 
 class EditCardDialogFragment(
     private val position: Int?, // Ahora es un parámetro opcional

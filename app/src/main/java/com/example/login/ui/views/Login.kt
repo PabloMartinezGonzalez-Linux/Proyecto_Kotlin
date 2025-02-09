@@ -1,10 +1,11 @@
-package com.example.login
+package com.example.login.ui.views
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.login.R
 import com.example.login.databinding.LoginBinding
 import com.google.firebase.auth.FirebaseAuth
 

@@ -1,8 +1,9 @@
-package com.example.login
+package com.example.login.ui.views
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.login.R
 import com.example.login.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

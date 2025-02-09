@@ -3,6 +3,7 @@
         android:id="@+id/bottom_home"
         android:icon="@drawable/anuncios_100"
         android:title="Anuncios" />
+
     <item
         android:id="@+id/bottom_profile"
         android:icon="@drawable/motos_100"

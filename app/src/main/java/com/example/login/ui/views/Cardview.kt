@@ -1,4 +1,4 @@
-package com.example.login
+package com.example.login.ui.views
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import com.example.login.R
 import com.example.login.databinding.ActivityRecyclerviewBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -20,7 +21,9 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         binding = ActivityRecyclerviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Configurar Toolbar
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.setTitleTextColor(resources.getColor(android.R.color.white))
 
         // Configurar DrawerLayout y NavigationView
         val drawerToggle = ActionBarDrawerToggle(
@@ -32,16 +35,21 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         )
         binding.drawerLayout.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
+
+        // 🔥 Cambiar color de las tres líneas del menú lateral a blanco
+        drawerToggle.drawerArrowDrawable.color = resources.getColor(R.color.blanco)
+
         binding.navigationView.setNavigationItemSelectedListener(this)
 
         // 🔥 Cargar el fragmento de inicio solo si no hay otro guardado
         if (savedInstanceState == null) {
             replaceFragment(HomeFragment()) // Cargar MotosFragment como pantalla principal
             binding.navigationView.setCheckedItem(R.id.nav_home) // Marcar Home como seleccionado
-            binding.bottomNavigation.selectedItemId = R.id.bottom_profile // Marcar "Motos" en BottomNavigation
+            binding.bottomNavigation.selectedItemId =
+                R.id.bottom_profile // Marcar "Motos" en BottomNavigation
         }
 
-        // Configurar BottomNavigationView
+        // 🔥 Configurar BottomNavigationView con Logout
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_home -> replaceFragment(AnunciosFragment()) // Cambia a AnunciosFragment
@@ -57,7 +65,7 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
                 replaceFragment(HomeFragment()) // Cargar MotosFragment (Home)
                 binding.bottomNavigation.selectedItemId = R.id.bottom_profile
             }
-            R.id.nav_logout -> logout() // Cerrar sesión
+            R.id.nav_logout -> logout() // 🔥 Cerrar sesión
         }
 
         // Cerrar el Navigation Drawer después de seleccionar una opción
