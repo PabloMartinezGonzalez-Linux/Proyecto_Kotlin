@@ -16,7 +16,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -49,7 +48,6 @@ abstract class AppModule {
 class CardViewModel @Inject constructor(
     private val cardRepository: CardRepository
 ) : ViewModel() {
-    // Aquí incluirías la lógica del ViewModel
 }
 
 @AndroidEntryPoint
