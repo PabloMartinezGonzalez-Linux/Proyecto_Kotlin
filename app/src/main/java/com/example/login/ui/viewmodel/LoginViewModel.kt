@@ -1,18 +1,16 @@
 package com.example.login.ui.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.login.data.repository.FirebaseAuthRepositoryImpl
 import com.example.login.domain.usecases.LoginUseCase
 import com.example.login.domain.usecases.RegisterUseCase
 import com.example.login.domain.usecases.ResetPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-// Representa los diferentes estados de autenticación
 sealed class AuthState {
     object Idle : AuthState()
     object Loading : AuthState()
@@ -20,12 +18,12 @@ sealed class AuthState {
     data class Error(val message: String) : AuthState()
 }
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val authRepository = FirebaseAuthRepositoryImpl()
-    private val loginUseCase = LoginUseCase(authRepository)
-    private val registerUseCase = RegisterUseCase(authRepository)
-    private val resetPasswordUseCase = ResetPasswordUseCase(authRepository)
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
+    private val resetPasswordUseCase: ResetPasswordUseCase
+) : ViewModel() {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState = _authState.asLiveData()

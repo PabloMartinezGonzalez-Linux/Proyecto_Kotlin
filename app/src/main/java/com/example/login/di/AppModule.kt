@@ -1,0 +1,61 @@
+package com.example.login.di
+
+import android.app.Application
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
+import com.example.login.R
+import com.example.login.data.repository.CardRepositoryImpl
+import com.example.login.data.repository.FirebaseAuthRepositoryImpl
+import com.example.login.domain.repository.AuthRepository
+import com.example.login.domain.repository.CardRepository
+import com.google.firebase.auth.FirebaseAuth
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AppModule {
+
+    companion object {
+        @Provides
+        @Singleton
+        fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+    }
+
+    @Binds
+    @Singleton
+    abstract fun bindCardRepository(
+        impl: CardRepositoryImpl
+    ): CardRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        impl: FirebaseAuthRepositoryImpl
+    ): AuthRepository
+}
+
+
+@HiltViewModel
+class CardViewModel @Inject constructor(
+    private val cardRepository: CardRepository
+) : ViewModel() {
+    // Aquí incluirías la lógica del ViewModel
+}
+
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+}

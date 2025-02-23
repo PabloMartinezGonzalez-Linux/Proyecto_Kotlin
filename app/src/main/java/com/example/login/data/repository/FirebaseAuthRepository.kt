@@ -3,9 +3,10 @@ package com.example.login.data.repository
 import com.example.login.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class FirebaseAuthRepositoryImpl(
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+class FirebaseAuthRepositoryImpl @Inject constructor(
+    private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
     override suspend fun login(email: String, password: String): Result<Unit> {
         return try {

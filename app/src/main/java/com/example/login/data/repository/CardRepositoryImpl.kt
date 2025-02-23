@@ -3,8 +3,11 @@ package com.example.login.data.repository
 import com.example.login.data.datasource.CardLocalDataSource
 import com.example.login.domain.models.CardItem
 import com.example.login.domain.repository.CardRepository
+import javax.inject.Inject
 
-class CardRepositoryImpl(private val localDataSource: CardLocalDataSource) : CardRepository {
+class CardRepositoryImpl @Inject constructor(
+    private val localDataSource: CardLocalDataSource
+) : CardRepository {
     override fun getAllCards(): List<CardItem> {
         return localDataSource.getCards()
     }

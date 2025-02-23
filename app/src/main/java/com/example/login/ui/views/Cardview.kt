@@ -3,18 +3,30 @@ package com.example.login.ui.views
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.example.login.R
 import com.example.login.databinding.ActivityRecyclerviewBinding
+import com.example.login.ui.viewmodel.UserProfileViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityRecyclerviewBinding
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    private val userProfileViewModel: UserProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,17 +50,29 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
 
         binding.navigationView.setNavigationItemSelectedListener(this)
 
+        val headerView = binding.navigationView.getHeaderView(0)
+        val profileImage = headerView.findViewById<ImageView>(R.id.profileImage)
+        val navUserName = headerView.findViewById<TextView>(R.id.navUserName)
+
+        userProfileViewModel.userProfile.observe(this) { profile ->
+            navUserName.text = profile.email
+            if (profile.photoUri != null) {
+                profileImage.setImageURI(profile.photoUri)
+            } else {
+                profileImage.setImageResource(R.drawable.perfil_100)
+            }
+        }
+
         if (savedInstanceState == null) {
-            replaceFragment(HomeFragment()) // Cargar MotosFragment como pantalla principal
-            binding.navigationView.setCheckedItem(R.id.nav_home) // Marcar Home como seleccionado
-            binding.bottomNavigation.selectedItemId =
-                R.id.bottom_profile // Marcar "Motos" en BottomNavigation
+            replaceFragment(HomeFragment())
+            binding.navigationView.setCheckedItem(R.id.nav_home)
+            binding.bottomNavigation.selectedItemId = R.id.bottom_profile
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.bottom_home -> replaceFragment(AnunciosFragment()) // Cambia a AnunciosFragment
-                R.id.bottom_profile -> replaceFragment(HomeFragment()) // Cambia a MotosFragment
+                R.id.bottom_home -> replaceFragment(AnunciosFragment())
+                R.id.bottom_profile -> replaceFragment(HomeFragment())
             }
             true
         }
@@ -57,10 +81,13 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> {
-                replaceFragment(HomeFragment()) // Cargar MotosFragment (Home)
+                replaceFragment(HomeFragment())
                 binding.bottomNavigation.selectedItemId = R.id.bottom_profile
             }
-            R.id.nav_logout -> logout() // 🔥 Cerrar sesión
+            R.id.nav_profile -> {
+                replaceFragment(ProfileFragment())
+            }
+            R.id.nav_logout -> logout()
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -74,7 +101,7 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
     }
 
     private fun logout() {
-        FirebaseAuth.getInstance().signOut()
+        firebaseAuth.signOut()
 
         val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
         sharedPreferences.edit().clear().apply()

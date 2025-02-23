@@ -2,8 +2,11 @@ package com.example.login.domain.usecases
 
 import com.example.login.domain.models.CardItem
 import com.example.login.domain.repository.CardRepository
+import javax.inject.Inject
 
-class AddCardUseCase(private val repository: CardRepository) {
+class AddCardUseCase @Inject constructor(
+    private val repository: CardRepository
+) {
     fun execute(card: CardItem) {
         repository.addCard(card)
     }
