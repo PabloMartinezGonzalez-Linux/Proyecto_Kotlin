@@ -1,5 +1,7 @@
 package com.example.login.ui.adapter
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +19,20 @@ class CardAdapter(
         fun bind(item: CardItem) {
             binding.Marca.text = item.brand
             binding.Modelo.text = item.model
-            item.imageRes?.let { binding.productImage.setImageResource(it) }
+
+            if (!item.imageBase64.isNullOrEmpty()) {
+                try {
+                    val decodedBytes = Base64.decode(item.imageBase64, Base64.DEFAULT)
+                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                    binding.productImage.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    item.imageRes?.let { binding.productImage.setImageResource(it) }
+                }
+            } else {
+                item.imageRes?.let { binding.productImage.setImageResource(it) }
+            }
+
             binding.root.setOnClickListener { onClick(adapterPosition) }
         }
     }

@@ -1,9 +1,7 @@
 package com.example.login.di
 
-import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.example.login.R
 import com.example.login.data.repository.CardRepositoryImpl
 import com.example.login.data.repository.FirebaseAuthRepositoryImpl
@@ -16,8 +14,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Module
@@ -41,13 +37,6 @@ abstract class AppModule {
     abstract fun bindAuthRepository(
         impl: FirebaseAuthRepositoryImpl
     ): AuthRepository
-}
-
-
-@HiltViewModel
-class CardViewModel @Inject constructor(
-    private val cardRepository: CardRepository
-) : ViewModel() {
 }
 
 @AndroidEntryPoint

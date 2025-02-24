@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="330dp"
+    android:layout_height="480dp"
+    android:minHeight="480dp"
+    android:minWidth="330dp"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_gravity="center"
     android:gravity="center"
-    android:background="@color/gris30"
+    android:background="@drawable/rounded"
     android:layout_margin="20dp">
 
     <TextView
@@ -18,8 +21,7 @@
         android:layout_marginLeft="5dp"
         android:textColor="@color/verde100"
         android:textSize="20dp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
     <EditText
         android:textCursorDrawable="@null"
@@ -31,8 +33,7 @@
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/gris50"
         android:textColorHint="@color/gris50"
-        android:textColor="@color/gris50"
-        />
+        android:textColor="@color/gris50" />
 
     <EditText
         android:textCursorDrawable="@null"
@@ -43,95 +44,48 @@
         android:padding="10dp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/gris50"
-        android:textColor="@color/gris50"
         android:textColorHint="@color/gris50"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fondo de la tarjeta"
-        android:layout_gravity="start"
-        android:layout_marginLeft="5dp"
-        android:textColor="@color/verde100"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:padding="15dp"/>
-
-    <RadioGroup
-        android:id="@+id/backgroundSelector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:backgroundTint="@color/negro100">
-
-        <RadioButton
-            android:id="@+id/rbRed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rojo"
-            android:textColor="@color/negro100"
-            android:backgroundTint="@color/verde50"
-            android:buttonTint="@color/verde100"/>
-
-        <RadioButton
-            android:id="@+id/rbBlue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Azul"
-            android:textColor="@color/negro100"
-            android:backgroundTint="@color/verde50"
-            android:buttonTint="@color/verde100"/>
-
-        <RadioButton
-            android:id="@+id/rbGreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Verde"
-            android:textColor="@color/negro100"
-            android:backgroundTint="@color/verde50"
-            android:buttonTint="@color/verde100"/>
-
-        <RadioButton
-            android:id="@+id/rbGris"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Gris"
-            android:textColor="@color/negro100"
-            android:backgroundTint="@color/verde50"/>
-    </RadioGroup>
+        android:textColor="@color/gris50" />
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="300dp"
-        android:layout_height="220dp"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
         android:layout_marginBottom="10dp"
         android:src="@drawable/img_1"
-        android:contentDescription="Imagen de la tarjeta"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
-    <Button
-        android:id="@+id/btnChangeImage"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cambiar imagen"
-        android:backgroundTint="@color/verde100"
-        android:textColor="@android:color/white"
-        android:padding="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp">
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Guardar"
-        android:backgroundTint="@color/verde100"
-        android:textColor="@android:color/white"
-        android:padding="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+        <ImageButton
+            android:id="@+id/btnChangeImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/camara3"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
+
+        <ImageButton
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/guardar"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginLeft="8dp"
+            />
+
+        <ImageButton
+            android:id="@+id/btnSelectFromGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/galeria3"
+            android:background="?attr/selectableItemBackgroundBorderless"
+           />
+    </LinearLayout>
 
 </LinearLayout>

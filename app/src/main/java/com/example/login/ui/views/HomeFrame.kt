@@ -1,6 +1,7 @@
 package com.example.login.ui.views
 
 import android.os.Bundle
+import com.example.login.ui.viewmodel.CardViewModel
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.databinding.FragmentHomeBinding
 import com.example.login.ui.adapter.CardAdapter
-import com.example.login.ui.viewmodel.CardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +40,8 @@ class HomeFragment : Fragment() {
             adapter.updateList(cards)
         }
 
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+        val itemTouchHelper = ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -72,8 +73,7 @@ class HomeFragment : Fragment() {
         if (cardToEdit != null) {
             val dialogFragment = EditCardDialogFragment.newInstance(cardToEdit)
             dialogFragment.onSave = { updatedCard ->
-                viewModel.deleteCard(cardToEdit)
-                viewModel.addCard(updatedCard)
+                viewModel.updateCard(updatedCard)
             }
             dialogFragment.show(parentFragmentManager, "EditCardDialog")
         }

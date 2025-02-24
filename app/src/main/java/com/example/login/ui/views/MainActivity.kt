@@ -1,7 +1,9 @@
 package com.example.login.ui.views
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import com.example.login.R
 import com.example.login.databinding.ActivityMainBinding
@@ -18,7 +20,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bttLog.setOnClickListener {
+        val videoUri = Uri.parse("android.resource://$packageName/${R.raw.anuncio}")
+        binding.videoView.setVideoURI(videoUri)
+
+        val mediaController = MediaController(this)
+        mediaController.setAnchorView(binding.videoView)
+        binding.videoView.setMediaController(null)
+
+        binding.videoView.setOnPreparedListener { mp ->
+            mp.isLooping = true
+            binding.videoView.start()
+        }
+
+        binding.textOmitir.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }
