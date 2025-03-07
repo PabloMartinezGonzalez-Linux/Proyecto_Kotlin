@@ -6,9 +6,11 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".MyApp"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -21,13 +23,13 @@
         <activity
             android:name=".ui.views.Cardview"
             android:exported="false" />
-        <activity android:name=".ui.views.Login" />
+        <!-- Actualiza el nombre a LoginActivity si esa es la clase correcta -->
+        <activity android:name=".ui.views.LoginActivity" />
         <activity
             android:name=".ui.views.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

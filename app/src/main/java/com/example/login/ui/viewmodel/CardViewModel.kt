@@ -1,61 +1,117 @@
 package com.example.login.ui.viewmodel
 
 import android.graphics.Bitmap
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.login.data.models.CardRequest
 import com.example.login.domain.models.CardItem
-import com.example.login.domain.usecases.AddCardUseCase
-import com.example.login.domain.usecases.DeleteCardUseCase
-import com.example.login.domain.usecases.GetCardsUseCase
-import com.example.login.domain.usecases.UpdateCardUseCase
-import com.example.login.domain.usecases.ConvertImageToBase64UseCase
+import com.example.login.domain.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CardViewModel @Inject constructor(
-    private val getCardsUseCase: GetCardsUseCase,
-    private val addCardUseCase: AddCardUseCase,
-    private val deleteCardUseCase: DeleteCardUseCase,
-    private val updateCardUseCase: UpdateCardUseCase,
-    private val convertImageToBase64UseCase: ConvertImageToBase64UseCase
+    private val cardRepository: CardRepository
 ) : ViewModel() {
 
-    private val _cards = MutableLiveData<List<CardItem>>()
+    private val _cards = MutableLiveData<List<CardItem>>() // 🔥 Ahora usa CardItem
     val cards: LiveData<List<CardItem>> get() = _cards
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
 
     private val _imageBase64 = MutableLiveData<String>()
     val imageBase64: LiveData<String> get() = _imageBase64
 
     init {
-        loadCards()
+        fetchCards() // 🔄 Cargar las tarjetas desde el backend al iniciar
     }
 
-    private fun loadCards() {
-        _cards.value = getCardsUseCase.execute()
+    /** 📌 Obtener todas las tarjetas desde el backend */
+    fun fetchCards() {
+        viewModelScope.launch {
+            val result = cardRepository.getCards()
+            result.fold(
+                onSuccess = { fetchedCards ->
+                    Log.d("CardViewModel", "Cantidad de tarjetas recibidas: ${fetchedCards.size}")
+                    _cards.value = fetchedCards.map { it.toCardItem() }
+                },
+                onFailure = { throwable ->
+                    _error.value = "Error al obtener tarjetas: ${throwable.message}"
+                    Log.e("CardViewModel", "Error al obtener tarjetas", throwable)
+                }
+            )
+        }
     }
 
-    fun addCard(card: CardItem) {
-        addCardUseCase.execute(card)
-        loadCards()
+
+
+    /** 📌 Crear una nueva tarjeta */
+    fun addCard(cardRequest: CardRequest) {
+        Log.d("CardViewModel", "Enviando CardRequest: $cardRequest") // 🔥 Agregamos un log para depurar
+        viewModelScope.launch {
+            val result = cardRepository.createCard(cardRequest)
+            result.fold(
+                onSuccess = {
+                    fetchCards() // 🔄 Recargar la lista tras añadir una tarjeta
+                },
+                onFailure = { throwable ->
+                    _error.value = "Error al crear tarjeta: ${throwable.message}"
+                    Log.e("CardViewModel", "Error al crear tarjeta", throwable)
+                }
+            )
+        }
     }
 
-    fun deleteCard(card: CardItem) {
-        deleteCardUseCase.execute(card)
-        loadCards()
+    /** 📌 Actualizar una tarjeta existente */
+    fun updateCard(id: Int, cardRequest: CardRequest) {
+        viewModelScope.launch {
+            val result = cardRepository.updateCard(id, cardRequest)
+            result.fold(
+                onSuccess = {
+                    fetchCards() // 🔄 Recargar la lista tras actualizar una tarjeta
+                },
+                onFailure = { throwable ->
+                    _error.value = "Error al actualizar tarjeta: ${throwable.message}"
+                    Log.e("CardViewModel", "Error al actualizar tarjeta", throwable)
+                }
+            )
+        }
     }
 
-    fun updateCard(card: CardItem) {
-        updateCardUseCase.execute(card)
-        loadCards()
+    /** 📌 Eliminar una tarjeta */
+    fun deleteCard(id: Int) {
+        viewModelScope.launch {
+            val result = cardRepository.deleteCard(id)
+            result.fold(
+                onSuccess = {
+                    fetchCards() // 🔄 Recargar la lista tras eliminar una tarjeta
+                },
+                onFailure = { throwable ->
+                    _error.value = "Error al eliminar tarjeta: ${throwable.message}"
+                    Log.e("CardViewModel", "Error al eliminar tarjeta", throwable)
+                }
+            )
+        }
     }
 
     fun processCapturedImage(bitmap: Bitmap) {
-        val base64 = convertImageToBase64UseCase.execute(bitmap)
-        _imageBase64.value = base64
-        Log.d("CardViewModel", "Imagen convertida a Base64: $base64")
+        viewModelScope.launch {
+            val base64Image = encodeToBase64(bitmap)
+            _imageBase64.postValue(base64Image) // 🔥 Guarda la imagen en LiveData
+        }
+    }
+
+    /** Convierte un Bitmap en una cadena Base64 */
+    private fun encodeToBase64(bitmap: Bitmap): String {
+        val outputStream = java.io.ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT)
     }
 
 }

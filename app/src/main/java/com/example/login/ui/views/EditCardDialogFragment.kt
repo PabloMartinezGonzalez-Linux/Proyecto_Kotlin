@@ -16,11 +16,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.example.login.R
 import com.example.login.databinding.DialogOptionsBinding
+import com.example.login.data.models.CardRequest
 import com.example.login.domain.models.CardItem
 import com.example.login.ui.viewmodel.CardViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class EditCardDialogFragment : DialogFragment() {
@@ -29,10 +30,9 @@ class EditCardDialogFragment : DialogFragment() {
     private val binding get() = _binding!!
 
     private var capturedBitmap: Bitmap? = null
-    private var selectedBackgroundRes: Int = R.drawable.bg_gris
     private var cardItem: CardItem? = null
 
-    var onSave: ((CardItem) -> Unit)? = null
+    var onSave: ((CardRequest) -> Unit)? = null
 
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var takePictureLauncher: ActivityResultLauncher<Void?>
@@ -57,16 +57,17 @@ class EditCardDialogFragment : DialogFragment() {
         _binding = DialogOptionsBinding.inflate(inflater, container, false)
         setupLaunchers()
 
+        // Inicializa cardItem si es nulo
         if (cardItem == null) {
             cardItem = CardItem(
-                imageRes = R.drawable.img_1,
+                id = null,  // Ahora `null` en lugar de `0` para evitar problemas con el backend
                 brand = "",
                 model = "",
-                bgImageRes = 0,
                 imageBase64 = null
             )
         }
 
+        // Cargar datos de la tarjeta
         cardItem?.let {
             binding.etMarca.setText(it.brand)
             binding.etModelo.setText(it.model)
@@ -75,11 +76,8 @@ class EditCardDialogFragment : DialogFragment() {
                 if (bitmap != null) {
                     binding.ivImage.setImageBitmap(bitmap)
                 }
-            } ?: it.imageRes?.let { res ->
-                binding.ivImage.setImageResource(res)
             }
         }
-
 
         binding.btnChangeImage.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
@@ -99,22 +97,19 @@ class EditCardDialogFragment : DialogFragment() {
         binding.btnSave.setOnClickListener {
             val brand = binding.etMarca.text.toString()
             val model = binding.etModelo.text.toString()
-            Log.d("EditCardDialog", "Valor de imageBase64 en ViewModel: ${viewModel.imageBase64.value}")
 
-            val newCard = cardItem?.apply {
-                this.brand = brand
-                this.model = model
-                this.bgImageRes = selectedBackgroundRes
-                this.imageBase64 = viewModel.imageBase64.value
-            } ?: CardItem(
-                imageRes = R.drawable.img_1,
+            val imageBase64 = viewModel.imageBase64.value ?: cardItem?.imageBase64 ?: ""
+
+            val request = CardRequest(
+                imageBase64 = imageBase64,
                 brand = brand,
                 model = model,
-                bgImageRes = selectedBackgroundRes,
-                imageBase64 = viewModel.imageBase64.value
+                averageRating = 0.0,
+                hasImprovements = false
             )
 
-            onSave?.invoke(newCard)
+            Log.d("EditCardDialog", "Guardando tarjeta: $request") // 🔥 Para depuración
+            onSave?.invoke(request)
             dismiss()
         }
 
@@ -175,6 +170,7 @@ class EditCardDialogFragment : DialogFragment() {
 
     companion object {
         private const val ARG_CARD_ITEM = "arg_card_item"
+
         fun newInstance(initialCard: CardItem?): EditCardDialogFragment {
             val fragment = EditCardDialogFragment()
             val bundle = Bundle()

@@ -1,5 +1,6 @@
 package com.example.login.ui.adapter
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import android.view.LayoutInflater
@@ -21,12 +22,10 @@ class CardAdapter(
             binding.Modelo.text = item.model
 
             if (!item.imageBase64.isNullOrEmpty()) {
-                try {
-                    val decodedBytes = Base64.decode(item.imageBase64, Base64.DEFAULT)
-                    val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                val bitmap = decodeBase64(item.imageBase64)
+                if (bitmap != null) {
                     binding.productImage.setImageBitmap(bitmap)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                } else {
                     item.imageRes?.let { binding.productImage.setImageResource(it) }
                 }
             } else {
@@ -48,8 +47,18 @@ class CardAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun updateList(newItems: List<CardItem>) {
-        items = newItems
+    fun updateList(newItems: List<CardItem>?) {
+        items = newItems ?: emptyList() // Evita valores nulos
         notifyDataSetChanged()
+    }
+
+    private fun decodeBase64(base64Str: String): Bitmap? {
+        return try {
+            val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+            BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

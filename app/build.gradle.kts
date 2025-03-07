@@ -4,6 +4,8 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.google.gms.google-services")
     id("kotlin-parcelize")
+    // Plugin para Kotlin Serialization
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.0"
 }
 
 // Aplica el plugin de Hilt de forma clásica
@@ -46,6 +48,12 @@ android {
 }
 
 dependencies {
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
     // Firebase
     implementation("com.google.firebase:firebase-auth")
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
@@ -70,13 +78,18 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt("com.google.dagger:hilt-android-compiler:2.48")
 
+    // Retrofit y OkHttp para conectarse al backend
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
     // Pruebas
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("androidx.fragment:fragment-ktx:1.5.7")
-
 }
 
 // Configuración de kapt

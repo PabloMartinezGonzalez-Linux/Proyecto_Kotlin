@@ -14,18 +14,12 @@ import com.example.login.R
 import com.example.login.databinding.ActivityRecyclerviewBinding
 import com.example.login.ui.viewmodel.UserProfileViewModel
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityRecyclerviewBinding
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
-
     private val userProfileViewModel: UserProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +28,7 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.setTitleTextColor(resources.getColor(android.R.color.white))
+        binding.toolbar.setTitleTextColor(resources.getColor(R.color.negro100))
 
         val drawerToggle = ActionBarDrawerToggle(
             this,
@@ -47,7 +41,6 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
         drawerToggle.syncState()
 
         drawerToggle.drawerArrowDrawable.color = resources.getColor(R.color.blanco)
-
         binding.navigationView.setNavigationItemSelectedListener(this)
 
         val headerView = binding.navigationView.getHeaderView(0)
@@ -101,12 +94,10 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
     }
 
     private fun logout() {
-        firebaseAuth.signOut()
-
-        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
-        sharedPreferences.edit().clear().apply()
-
-        val intent = Intent(this, Login::class.java)
+        // Ya no usamos firebaseAuth para el logout.
+        // En su lugar, limpia el token almacenado y navega a la pantalla de login.
+        com.example.login.data.network.TokenManager.saveToken("") // O elimina el token
+        val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
