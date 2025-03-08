@@ -23,6 +23,15 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="130dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/img_1"
+        android:scaleType="centerCrop"/>
+
+
     <EditText
         android:id="@+id/etName"
         android:layout_width="match_parent"
@@ -61,6 +70,7 @@
         android:id="@+id/cbHasImprovements"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/negro100"
         android:text="Tiene mejoras" />
 
     <LinearLayout
@@ -78,6 +88,13 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginLeft="8dp"
             />
+        <ImageButton
+            android:id="@+id/btnSelectFromGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/galeria3"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
     </LinearLayout>
 
 </LinearLayout>
