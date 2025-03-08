@@ -1,8 +1,11 @@
 package com.example.login.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.login.domain.models.CardItem
+import com.example.login.domain.models.CardRequest
+import com.example.login.domain.usecases.AddCardUseCase
 import com.example.login.domain.usecases.GetCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CardViewModel @Inject constructor(
-    private val getCardsUseCase: GetCardsUseCase
+    private val getCardsUseCase: GetCardsUseCase,
+    private val addCardUseCase: AddCardUseCase //
 ) : ViewModel() {
 
     private val _cards = MutableStateFlow<List<CardItem>>(emptyList())
@@ -30,4 +34,19 @@ class CardViewModel @Inject constructor(
             )
         }
     }
+
+    fun addCard(newCard: CardRequest) {
+        viewModelScope.launch {
+            val result = addCardUseCase.execute(newCard)
+            result.fold(
+                onSuccess = {
+                    fetchCards()
+                },
+                onFailure = {
+                    _errorMessage.value = it.message
+                }
+            )
+        }
+    }
+
 }

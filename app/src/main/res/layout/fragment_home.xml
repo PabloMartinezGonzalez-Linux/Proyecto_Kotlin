@@ -33,7 +33,7 @@
 
     <!-- Botón para agregar nueva tarjeta -->
     <Button
-        android:id="@+id/addCardButton"
+        android:id="@id/addCardButton"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:backgroundTint="@color/verde100"

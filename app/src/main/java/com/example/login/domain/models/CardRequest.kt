@@ -3,9 +3,7 @@ package com.example.login.domain.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CardItem(
-    val id: Int? = null,  // 🔹 No requerido en POST
-    val userId: Int? = null,  // 🔹 No requerido en POST
+data class CardRequest(
     val photo: String,
     val name: String,
     val description: String,

@@ -3,6 +3,7 @@ package com.example.login.data.network.sesion
 import android.util.Log
 import com.example.login.data.network.services.CardService
 import com.example.login.domain.models.CardItem
+import com.example.login.domain.models.CardRequest
 import com.example.login.domain.repository.CardRepository
 import javax.inject.Inject
 
@@ -26,6 +27,21 @@ class CardRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             Log.e("CardRepositoryImpl", "Error en la solicitud de cards", e)
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addCard(newCard: CardRequest): Result<CardItem> {
+        return try {
+            val response = cardService.addCard(newCard)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    Result.success(it)  // 🔹 Devuelve la card creada
+                } ?: Result.failure(Exception("Error: Respuesta vacía"))
+            } else {
+                Result.failure(Exception("Error: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
             Result.failure(e)
         }
     }
