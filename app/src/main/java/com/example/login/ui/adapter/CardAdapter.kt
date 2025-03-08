@@ -10,14 +10,18 @@ import com.example.login.databinding.ItemCardBinding
 import com.example.login.domain.models.CardItem
 
 class CardAdapter(
-    private var items: List<CardItem>,
+    private var items: MutableList<CardItem>, // ✅ MutableList para modificar la lista
     private val onClick: (Int) -> Unit
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: CardItem) {
+        private var currentPosition: Int = RecyclerView.NO_POSITION // Guardar posición segura
+
+        fun bind(item: CardItem, position: Int) {
+            currentPosition = position // Guardar la posición al hacer bind
+
             binding.Marca.text = item.brand
             binding.Modelo.text = item.model
 
@@ -32,9 +36,14 @@ class CardAdapter(
                 item.imageRes?.let { binding.productImage.setImageResource(it) }
             }
 
-            binding.root.setOnClickListener { onClick(adapterPosition) }
+            binding.root.setOnClickListener {
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    onClick(currentPosition) // Usamos la posición almacenada
+                }
+            }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -42,13 +51,16 @@ class CardAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(items[position], position) // Pasamos la posición aquí
     }
 
     override fun getItemCount(): Int = items.size
 
     fun updateList(newItems: List<CardItem>?) {
-        items = newItems ?: emptyList() // Evita valores nulos
+        items.clear() // ✅ Limpia la lista anterior
+        if (newItems != null) {
+            items.addAll(newItems) // ✅ Agrega los nuevos elementos
+        }
         notifyDataSetChanged()
     }
 

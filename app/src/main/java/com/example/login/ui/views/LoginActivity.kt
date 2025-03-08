@@ -17,10 +17,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginBinding
     private val viewModel: LoginViewModel by viewModels()
 
-    // Suponiendo que en tu layout tienes campos de entrada llamados usernameEditText y passwordEditText
-    private val username get() = binding.usernameEditText.text.toString().trim()
-    private val pass get() = binding.passwordEditText.text.toString().trim()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = LoginBinding.inflate(layoutInflater)
@@ -31,16 +27,22 @@ class LoginActivity : AppCompatActivity() {
             when (state) {
                 is AuthState.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
+                    binding.loginButton.isEnabled = false
+                    binding.registerButton.isEnabled = false
                 }
                 is AuthState.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    // Login exitoso, navega a la siguiente pantalla (por ejemplo, Cardview)
+                    binding.loginButton.isEnabled = true
+                    binding.registerButton.isEnabled = true
+                    // Navegar a la pantalla de tarjetas
                     val intent = Intent(this, Cardview::class.java)
                     startActivity(intent)
-                    finish()
+                    binding.root.postDelayed({ finish() }, 300) // Evita cerrar antes de que se cargue la nueva pantalla
                 }
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE
+                    binding.loginButton.isEnabled = true
+                    binding.registerButton.isEnabled = true
                     showAlert(state.message)
                 }
                 else -> Unit
@@ -48,28 +50,34 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.loginButton.setOnClickListener {
-            if (username.isBlank() || pass.isBlank()) {
-                showAlert("Por favor, completa todos los campos.")
-                return@setOnClickListener
+            binding.apply {
+                val username = usernameEditText.text.toString().trim()
+                val pass = passwordEditText.text.toString().trim()
+
+                if (username.isBlank() || pass.isBlank()) {
+                    showAlert("Por favor, completa todos los campos.")
+                    return@setOnClickListener
+                }
+
+                loginButton.isEnabled = false // Deshabilitar botón para evitar spam de clics
+                viewModel.login(username, pass)
             }
-            viewModel.login(username, pass)
         }
 
         binding.registerButton.setOnClickListener {
-            if (username.isBlank() || pass.isBlank()) {
-                showAlert("Por favor, completa todos los campos.")
-                return@setOnClickListener
-            }
-            // Para el registro, se asume que se usará el username también como correo, o podrías tener otro campo
-            viewModel.register(username, "$username@example.com", pass)
-        }
+            binding.apply {
+                val username = usernameEditText.text.toString().trim()
+                val pass = passwordEditText.text.toString().trim()
+                val email = "$username@example.com" // 🔹 Se genera automáticamente a partir del username
 
-        binding.resetPass.setOnClickListener {
-            if (username.isBlank()) {
-                showAlert("Por favor, introduce un correo electrónico válido.")
-                return@setOnClickListener
+                if (username.isBlank() || pass.isBlank()) {
+                    showAlert("Por favor, completa todos los campos.")
+                    return@setOnClickListener
+                }
+
+                registerButton.isEnabled = false // Evitar clics repetidos
+                viewModel.register(username, email, pass)
             }
-            viewModel.resetPassword(username)
         }
     }
 

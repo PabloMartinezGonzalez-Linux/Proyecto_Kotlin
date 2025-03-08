@@ -96,7 +96,6 @@ class Cardview : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
     private fun logout() {
         // Ya no usamos firebaseAuth para el logout.
         // En su lugar, limpia el token almacenado y navega a la pantalla de login.
-        com.example.login.data.network.TokenManager.saveToken("") // O elimina el token
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)

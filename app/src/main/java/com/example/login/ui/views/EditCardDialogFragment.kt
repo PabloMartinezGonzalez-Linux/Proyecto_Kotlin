@@ -1,4 +1,6 @@
+/*
 package com.example.login.ui.views
+
 
 import android.Manifest
 import android.graphics.Bitmap
@@ -17,15 +19,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.login.databinding.DialogOptionsBinding
-import com.example.login.data.models.CardRequest
 import com.example.login.domain.models.CardItem
-import com.example.login.ui.viewmodel.CardViewModel
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class EditCardDialogFragment : DialogFragment() {
-
     private var _binding: DialogOptionsBinding? = null
     private val binding get() = _binding!!
 
@@ -180,3 +178,4 @@ class EditCardDialogFragment : DialogFragment() {
         }
     }
 }
+*/

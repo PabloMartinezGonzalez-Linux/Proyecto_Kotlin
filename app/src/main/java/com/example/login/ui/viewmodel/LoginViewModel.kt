@@ -1,12 +1,12 @@
 package com.example.login.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.login.data.network.TokenManager
+import com.example.login.data.network.sesion.SessionManager
 import com.example.login.domain.usecases.LoginUseCase
 import com.example.login.domain.usecases.RegisterUseCase
-import com.example.login.domain.usecases.ResetPasswordUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
-    private val resetPasswordUseCase: ResetPasswordUseCase
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
@@ -25,38 +25,44 @@ class LoginViewModel @Inject constructor(
     fun login(username: String, password: String) {
         _authState.value = AuthState.Loading
         viewModelScope.launch {
+            Log.d("LoginViewModel", "Iniciando login con usuario: $username")
             val result = loginUseCase.execute(username, password)
             result.fold(
                 onSuccess = { token ->
-                    TokenManager.saveToken(token) // ✅ Guarda el token correctamente
+                    Log.d("LoginViewModel", "Login exitoso, token recibido: $token")
+                    sessionManager.saveAuthToken(token)  // ✅ Guardar el token
                     _authState.value = AuthState.Success(token)
                 },
                 onFailure = { error ->
+                    Log.e("LoginViewModel", "Error en login: ${error.message}")
                     _authState.value = AuthState.Error(error.message ?: "Error desconocido")
                 }
             )
         }
     }
 
+    fun getToken(): String? {
+        return sessionManager.getAuthToken() // ✅ Obtener el token cuando sea necesario
+    }
+
     fun register(username: String, email: String, password: String) {
+        Log.d("LoginViewModel", "Registro iniciado con: username=$username, email=$email") // 🛠
         _authState.value = AuthState.Loading
         viewModelScope.launch {
             val result = registerUseCase.execute(username, email, password)
+
             result.fold(
-                onSuccess = { _authState.value = AuthState.Success("Registro exitoso") },
-                onFailure = { _authState.value = AuthState.Error(it.message ?: "Error desconocido") }
+                onSuccess = {
+                    Log.d("LoginViewModel", "Registro exitoso") // 🛠
+                    _authState.value = AuthState.Success("Registro exitoso")
+                },
+                onFailure = { error ->
+                    Log.e("LoginViewModel", "Error en registro: ${error.message}") // 🛠
+                    _authState.value = AuthState.Error(error.message ?: "Error desconocido")
+                }
             )
         }
     }
 
-    fun resetPassword(email: String) {
-        _authState.value = AuthState.Loading
-        viewModelScope.launch {
-            val result = resetPasswordUseCase.execute(email)
-            result.fold(
-                onSuccess = { _authState.value = AuthState.Success("Correo enviado") },
-                onFailure = { _authState.value = AuthState.Error(it.message ?: "Error desconocido") }
-            )
-        }
-    }
+
 }
