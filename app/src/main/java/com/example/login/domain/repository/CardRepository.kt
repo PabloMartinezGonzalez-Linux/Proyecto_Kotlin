@@ -7,4 +7,5 @@ interface CardRepository {
     suspend fun getCards(): Result<List<CardItem>>
     suspend fun addCard(newCard: CardRequest): Result<CardItem>
     suspend fun deleteCard(cardId: Int): Result<Unit>
+    suspend fun updateCard(cardId: Int, updatedCard: CardRequest): Result<CardItem>
 }

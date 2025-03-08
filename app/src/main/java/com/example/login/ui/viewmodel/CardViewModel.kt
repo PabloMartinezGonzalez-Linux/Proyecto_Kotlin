@@ -8,6 +8,7 @@ import com.example.login.domain.models.CardRequest
 import com.example.login.domain.usecases.AddCardUseCase
 import com.example.login.domain.usecases.DeleteCardUseCase
 import com.example.login.domain.usecases.GetCardsUseCase
+import com.example.login.domain.usecases.UpdateCardUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class CardViewModel @Inject constructor(
     private val getCardsUseCase: GetCardsUseCase,
     private val addCardUseCase: AddCardUseCase,
-    private val deleteCardUseCase: DeleteCardUseCase
+    private val deleteCardUseCase: DeleteCardUseCase,
+    private val updateCardUseCase: UpdateCardUseCase
 ) : ViewModel() {
 
     private val _cards = MutableStateFlow<List<CardItem>>(emptyList())
@@ -67,6 +69,17 @@ class CardViewModel @Inject constructor(
         }
     }
 
+    fun updateCard(cardId: Int, updatedCard: CardRequest) {
+        viewModelScope.launch {
+            val result = updateCardUseCase.execute(cardId, updatedCard)
+            result.fold(
+                onSuccess = {
+                    fetchCards()
+                },
+                onFailure = { _errorMessage.value = it.message }
+            )
+        }
+    }
 
 
 }

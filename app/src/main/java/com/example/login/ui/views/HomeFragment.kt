@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.login.databinding.FragmentHomeBinding
-import com.example.login.domain.models.CardRequest
 import com.example.login.ui.adapter.CardAdapter
 import com.example.login.ui.viewmodel.CardViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,71 +33,49 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // ✅ Inicializar el adapter con una lista vacía
-        adapter = CardAdapter(mutableListOf()) { position ->
-            // Aquí puedes manejar la acción al hacer clic en una card
+        // 🔹 Ahora pasamos una función de clic en las cards
+        adapter = CardAdapter(mutableListOf()) { selectedCard ->
+            CardDialogFragment(selectedCard).show(parentFragmentManager, "CardDialogFragment")
         }
 
-        // Configurar RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        // ✅ Agregar la funcionalidad de deslizar para eliminar
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
+            ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val cardToDelete = adapter.getItemAt(position)
-
                 cardViewModel.deleteCard(cardToDelete)
                 adapter.removeItem(position)
             }
-
         })
 
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
 
-        // ✅ Observar las cards del ViewModel y actualizar la UI
         viewLifecycleOwner.lifecycleScope.launch {
             cardViewModel.cards.collectLatest { cards ->
                 Log.d("HomeFragment", "📌 Nueva lista de tarjetas recibida: ${cards.size} tarjetas")
-                adapter.updateList(cards) // 🔥 Se actualiza la lista visualmente
+                adapter.updateList(cards)
             }
         }
 
-        // ✅ Observar posibles errores
         viewLifecycleOwner.lifecycleScope.launch {
             cardViewModel.errorMessage.collectLatest { error ->
-                error?.let {
-                    Log.e("HomeFragment", "❌ Error: $it")
-                }
+                error?.let { Log.e("HomeFragment", "❌ Error: $it") }
             }
         }
 
-        // ✅ Llamar a fetchCards() para obtener las cards desde la API
         cardViewModel.fetchCards()
 
-        // ✅ Configurar el botón para añadir una tarjeta nueva
+        // 🔹 Si se pulsa el botón "Añadir", abrir el diálogo en modo CREACIÓN
         binding.addCardButton.setOnClickListener {
-            val newCard = CardRequest(
-                photo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...", // 🔹 Mantener la estructura correcta
-                name = "Card de Ejemplo",
-                description = "Prueba",
-                averageRating = 4.5,
-                hasImprovements = true
-            )
-
-            cardViewModel.addCard(newCard)
-
-            // 🔄 Después de añadir, actualizar la lista
-            cardViewModel.fetchCards()
+            CardDialogFragment().show(parentFragmentManager, "CardDialogFragment")
         }
 
         return binding.root

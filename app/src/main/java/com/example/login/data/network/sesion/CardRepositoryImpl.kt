@@ -60,4 +60,19 @@ class CardRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateCard(cardId: Int, updatedCard: CardRequest): Result<CardItem> {
+        return try {
+            val response = cardService.updateCard(cardId, updatedCard)
+            if (response.isSuccessful) {
+                response.body()?.let { Result.success(it) }
+                    ?: Result.failure(Exception("Respuesta vacía"))
+            } else {
+                Result.failure(Exception("Error al actualizar la card: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
 }

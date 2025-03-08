@@ -11,6 +11,10 @@ import com.example.login.data.network.sesion.SessionManager
 import com.example.login.data.repository.AuthRepositoryImpl
 import com.example.login.domain.repository.AuthRepository
 import com.example.login.domain.repository.CardRepository
+import com.example.login.domain.usecases.AddCardUseCase
+import com.example.login.domain.usecases.DeleteCardUseCase
+import com.example.login.domain.usecases.GetCardsUseCase
+import com.example.login.domain.usecases.UpdateCardUseCase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
@@ -95,6 +99,32 @@ object AppModule {
     fun provideCardRepository(cardService: CardService): CardRepository {
         return CardRepositoryImpl(cardService)
     }
+
+    @Provides
+    @Singleton
+    fun provideGetCardsUseCase(cardRepository: CardRepository): GetCardsUseCase {
+        return GetCardsUseCase(cardRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAddCardUseCase(cardRepository: CardRepository): AddCardUseCase {
+        return AddCardUseCase(cardRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteCardUseCase(cardRepository: CardRepository): DeleteCardUseCase {
+        return DeleteCardUseCase(cardRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateCardUseCase(cardRepository: CardRepository): UpdateCardUseCase {
+        return UpdateCardUseCase(cardRepository)
+    }
+
+
 }
 
 /** ✅ Módulo para inyectar repositorios con Hilt */

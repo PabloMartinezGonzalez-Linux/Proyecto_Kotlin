@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface CardService {
@@ -18,6 +19,9 @@ interface CardService {
 
     @DELETE("cards/{id}") // 🔥 Ruta para eliminar
     suspend fun deleteCard(@Path("id") cardId: Int): Response<Unit>
+
+    @PUT("/cards/{id}")
+    suspend fun updateCard(@Path("id") cardId: Int, @Body updatedCard: CardRequest): Response<CardItem>
 }
 
 
