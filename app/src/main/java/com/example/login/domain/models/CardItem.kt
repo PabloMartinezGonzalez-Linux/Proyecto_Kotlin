@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CardItem(
-    val id: Int? = null,  // 🔹 No requerido en POST
-    val userId: Int? = null,  // 🔹 No requerido en POST
+    val id: Int? = null,
+    val userId: Int? = null,
     val photo: String,
     val name: String,
     val description: String,

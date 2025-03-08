@@ -50,6 +50,15 @@ class CardAdapter(
         holder.bind(items[position])
     }
 
+    fun getItemAt(position: Int): CardItem {
+        return items[position]
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position) // 🔥 Notificar que un ítem fue eliminado
+    }
+
     override fun getItemCount(): Int = items.size
 
     fun updateList(newItems: List<CardItem>?) {

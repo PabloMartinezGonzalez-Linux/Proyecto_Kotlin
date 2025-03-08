@@ -45,4 +45,19 @@ class CardRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun deleteCard(cardId: Int): Result<Unit> {
+        return try {
+            val response = cardService.deleteCard(cardId)
+
+            if (response.isSuccessful) {
+                Result.success(Unit) // ✅ Eliminación exitosa
+            } else {
+                Result.failure(Exception("Error al eliminar: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }

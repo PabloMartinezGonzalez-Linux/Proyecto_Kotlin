@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.login.domain.models.CardItem
 import com.example.login.domain.models.CardRequest
 import com.example.login.domain.usecases.AddCardUseCase
+import com.example.login.domain.usecases.DeleteCardUseCase
 import com.example.login.domain.usecases.GetCardsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CardViewModel @Inject constructor(
     private val getCardsUseCase: GetCardsUseCase,
-    private val addCardUseCase: AddCardUseCase //
+    private val addCardUseCase: AddCardUseCase,
+    private val deleteCardUseCase: DeleteCardUseCase
 ) : ViewModel() {
 
     private val _cards = MutableStateFlow<List<CardItem>>(emptyList())
@@ -48,5 +50,23 @@ class CardViewModel @Inject constructor(
             )
         }
     }
+
+    fun deleteCard(card: CardItem) {
+        card.id?.let { cardId ->
+            viewModelScope.launch {
+                val result = deleteCardUseCase.execute(cardId)
+                result.fold(
+                    onSuccess = {
+                        fetchCards()
+                    },
+                    onFailure = { _errorMessage.value = it.message }
+                )
+            }
+        } ?: run {
+            _errorMessage.value = "Error: La tarjeta no tiene un ID válido."
+        }
+    }
+
+
 
 }
