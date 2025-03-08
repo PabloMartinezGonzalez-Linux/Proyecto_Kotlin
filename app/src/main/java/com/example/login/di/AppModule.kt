@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.login.R
 import com.example.login.data.network.services.AuthService
+import com.example.login.data.network.services.CardService
+import com.example.login.data.network.sesion.CardRepositoryImpl
 import com.example.login.data.network.sesion.SessionManager
 import com.example.login.data.repository.AuthRepositoryImpl
 import com.example.login.domain.repository.AuthRepository
+import com.example.login.domain.repository.CardRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
@@ -22,7 +25,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-/** ✅ Módulo para proporcionar Retrofit y AuthService */
+/** ✅ Módulo para proporcionar Retrofit y servicios de red */
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -79,6 +82,18 @@ object AppModule {
     @Singleton
     fun provideAuthService(retrofit: Retrofit): AuthService {
         return retrofit.create(AuthService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardService(retrofit: Retrofit): CardService {
+        return retrofit.create(CardService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardRepository(cardService: CardService): CardRepository {
+        return CardRepositoryImpl(cardService)
     }
 }
 

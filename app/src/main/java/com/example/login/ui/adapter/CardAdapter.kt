@@ -11,39 +11,35 @@ import com.example.login.domain.models.CardItem
 
 class CardAdapter(
     private var items: MutableList<CardItem>, // ✅ MutableList para modificar la lista
-    private val onClick: (Int) -> Unit
+    private val onClick: (CardItem) -> Unit // 🔄 Ahora pasa el objeto completo en vez de la posición
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private var currentPosition: Int = RecyclerView.NO_POSITION // Guardar posición segura
+        fun bind(item: CardItem) {
+            binding.cardName.text = item.name
+            binding.cardDescription.text = item.description
+            binding.cardRating.text = "⭐ ${item.averageRating}" // ✅ Mostrar rating
 
-        fun bind(item: CardItem, position: Int) {
-            currentPosition = position // Guardar la posición al hacer bind
-
-            binding.Marca.text = item.brand
-            binding.Modelo.text = item.model
-
-            if (!item.imageBase64.isNullOrEmpty()) {
-                val bitmap = decodeBase64(item.imageBase64)
+            // ✅ Decodificar la imagen base64
+            if (!item.photo.isNullOrEmpty()) {
+                val bitmap = decodeBase64(item.photo)
                 if (bitmap != null) {
-                    binding.productImage.setImageBitmap(bitmap)
+                    binding.cardImage.setImageBitmap(bitmap)
                 } else {
-                    item.imageRes?.let { binding.productImage.setImageResource(it) }
+                    binding.cardImage.setImageResource(android.R.drawable.ic_menu_gallery)
                 }
             } else {
-                item.imageRes?.let { binding.productImage.setImageResource(it) }
+                binding.cardImage.setImageResource(android.R.drawable.ic_menu_gallery)
             }
 
+            // ✅ Manejar clic en la tarjeta
             binding.root.setOnClickListener {
-                if (currentPosition != RecyclerView.NO_POSITION) {
-                    onClick(currentPosition) // Usamos la posición almacenada
-                }
+                onClick(item)
             }
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
         val binding = ItemCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -51,22 +47,23 @@ class CardAdapter(
     }
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
-        holder.bind(items[position], position) // Pasamos la posición aquí
+        holder.bind(items[position])
     }
 
     override fun getItemCount(): Int = items.size
 
     fun updateList(newItems: List<CardItem>?) {
-        items.clear() // ✅ Limpia la lista anterior
+        items.clear()
         if (newItems != null) {
-            items.addAll(newItems) // ✅ Agrega los nuevos elementos
+            items.addAll(newItems)
         }
         notifyDataSetChanged()
     }
 
     private fun decodeBase64(base64Str: String): Bitmap? {
         return try {
-            val decodedBytes = Base64.decode(base64Str, Base64.DEFAULT)
+            val base64Data = base64Str.substringAfter("base64,") // Elimina el prefijo "data:image/png;base64,"
+            val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         } catch (e: Exception) {
             e.printStackTrace()

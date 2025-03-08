@@ -29,11 +29,11 @@
             android:weightSum="1">
 
             <ImageView
-                android:id="@+id/productImage"
+                android:id="@+id/cardImage"
                 android:layout_width="120dp"
                 android:layout_height="90dp"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="Imagen del producto"
+                android:contentDescription="Imagen de la tarjeta"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_1"
                 android:layout_marginLeft="5dp"/>
@@ -48,23 +48,31 @@
                 android:gravity="bottom|end">
 
                 <TextView
-                    android:id="@+id/Modelo"
+                    android:id="@+id/cardName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Z900"
+                    android:text="Nombre de la Card"
                     android:textColor="@color/blanco"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/Marca"
+                    android:id="@+id/cardDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="KAWASAKI"
+                    android:text="Descripción de la Card"
                     android:textColor="@color/blanco"
-                    android:textSize="19sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="20dp"/>
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/cardRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⭐ 4.5"
+                    android:textColor="@color/blanco"
+                    android:textSize="14sp"
+                    android:textStyle="italic"/>
             </LinearLayout>
 
         </LinearLayout>
