@@ -25,7 +25,6 @@
         <activity
             android:name=".ui.views.Cardview"
             android:exported="false" />
-        <!-- Actualiza el nombre a LoginActivity si esa es la clase correcta -->
         <activity android:name=".ui.views.LoginActivity" />
         <activity
             android:name=".ui.views.MainActivity"

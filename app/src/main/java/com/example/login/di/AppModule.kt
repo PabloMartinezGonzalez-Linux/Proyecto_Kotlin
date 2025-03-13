@@ -29,8 +29,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
-/** ✅ Módulo para proporcionar Retrofit y servicios de red */
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -48,7 +46,6 @@ object AppModule {
             .addInterceptor { chain ->
                 val request = chain.request()
 
-                // Excluir login y register de la autenticación
                 if (request.url.encodedPath.endsWith("/login") || request.url.encodedPath.endsWith("/register")) {
                     return@addInterceptor chain.proceed(request)
                 }
@@ -127,7 +124,6 @@ object AppModule {
 
 }
 
-/** ✅ Módulo para inyectar repositorios con Hilt */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {

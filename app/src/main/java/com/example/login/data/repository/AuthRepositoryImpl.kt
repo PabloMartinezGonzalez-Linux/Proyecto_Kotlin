@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val authService: AuthService,
-    private val sessionManager: SessionManager // ✅ Inyectamos SessionManager
+    private val sessionManager: SessionManager
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String): Result<String> {
@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 response.body()?.let { loginResponse ->
-                    sessionManager.saveAuthToken(loginResponse.token) // ✅ Guardamos el token
+                    sessionManager.saveAuthToken(loginResponse.token)
                     Result.success(loginResponse.token)
                 } ?: Result.failure(Exception("Respuesta vacía"))
             } else {

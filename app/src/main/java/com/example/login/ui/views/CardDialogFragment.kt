@@ -29,14 +29,13 @@ import java.io.ByteArrayOutputStream
 class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() {
 
     private val cardViewModel: CardViewModel by activityViewModels()
-    private var selectedImageBase64: String? = null // Para almacenar la imagen en Base64
+    private var selectedImageBase64: String? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(requireContext())
         val inflater = LayoutInflater.from(requireContext())
         val view = inflater.inflate(R.layout.dialog_card, null)
 
-        // Obtener referencias a los elementos del diálogo
         val etName = view.findViewById<EditText>(R.id.etName)
         val etDescription = view.findViewById<EditText>(R.id.etDescription)
         val etAverageRating = view.findViewById<EditText>(R.id.etAverageRating)
@@ -45,28 +44,25 @@ class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() 
         val btnSelectFromGallery = view.findViewById<ImageButton>(R.id.btnSelectFromGallery)
         val btnSave = view.findViewById<ImageButton>(R.id.btnSave)
 
-        // Si estamos editando, rellenar los campos con los datos actuales
         card?.let {
             etName.setText(it.name)
             etDescription.setText(it.description)
             etAverageRating.setText(it.averageRating.toString())
             cbHasImprovements.isChecked = it.hasImprovements
 
-            // Si la tarjeta ya tiene una imagen, la mostramos
             if (!it.photo.isNullOrEmpty()) {
                 val bitmap = decodeBase64(it.photo)
                 if (bitmap != null) ivImage.setImageBitmap(bitmap)
             }
         }
 
-        // 🔹 Abrir la galería para seleccionar una imagen
         val pickImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     val imageUri = result.data?.data
                     imageUri?.let {
-                        ivImage.setImageURI(it) // Mostrar la imagen seleccionada
-                        selectedImageBase64 = encodeImageToBase64(it) // Convertir a Base64
+                        ivImage.setImageURI(it)
+                        selectedImageBase64 = encodeImageToBase64(it)
                     }
                 }
             }
@@ -82,7 +78,6 @@ class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() 
             val averageRating = etAverageRating.text.toString().toDoubleOrNull() ?: 0.0
             val hasImprovements = cbHasImprovements.isChecked
 
-            // Si la imagen no cambia, usar la existente o Base64 de la galería
             val photoBase64 = selectedImageBase64 ?: card?.photo ?: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
 
             val newCard = CardRequest(
@@ -101,7 +96,7 @@ class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() 
                 }
             }
 
-            dismiss() // Cierra el diálogo después de guardar
+            dismiss()
         }
 
         builder.setView(view)
@@ -115,7 +110,7 @@ class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() 
             inputStream?.close()
 
             val outputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream) // Comprime al 50%
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
             val byteArray = outputStream.toByteArray()
 
             "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT)
@@ -128,7 +123,7 @@ class CardDialogFragment(private val card: CardItem? = null) : DialogFragment() 
 
     private fun decodeBase64(base64Str: String): Bitmap? {
         return try {
-            val base64Data = base64Str.substringAfter("base64,") // Elimina el prefijo "data:image/png;base64,"
+            val base64Data = base64Str.substringAfter("base64,")
             val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         } catch (e: Exception) {

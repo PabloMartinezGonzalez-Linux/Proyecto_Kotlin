@@ -33,7 +33,6 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // 🔹 Ahora pasamos una función de clic en las cards
         adapter = CardAdapter(mutableListOf()) { selectedCard ->
             CardDialogFragment(selectedCard).show(parentFragmentManager, "CardDialogFragment")
         }
@@ -60,20 +59,19 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             cardViewModel.cards.collectLatest { cards ->
-                Log.d("HomeFragment", "📌 Nueva lista de tarjetas recibida: ${cards.size} tarjetas")
+                Log.d("HomeFragment", " Nueva lista de tarjetas recibida: ${cards.size} tarjetas")
                 adapter.updateList(cards)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             cardViewModel.errorMessage.collectLatest { error ->
-                error?.let { Log.e("HomeFragment", "❌ Error: $it") }
+                error?.let { Log.e("HomeFragment", " Error: $it") }
             }
         }
 
         cardViewModel.fetchCards()
 
-        // 🔹 Si se pulsa el botón "Añadir", abrir el diálogo en modo CREACIÓN
         binding.addCardButton.setOnClickListener {
             CardDialogFragment().show(parentFragmentManager, "CardDialogFragment")
         }

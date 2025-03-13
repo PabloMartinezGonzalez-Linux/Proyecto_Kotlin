@@ -17,7 +17,7 @@ interface CardService {
     @POST("/cards")
     suspend fun addCard(@Body newCard: CardRequest): Response<CardItem>
 
-    @DELETE("cards/{id}") // 🔥 Ruta para eliminar
+    @DELETE("cards/{id}")
     suspend fun deleteCard(@Path("id") cardId: Int): Response<Unit>
 
     @PUT("/cards/{id}")

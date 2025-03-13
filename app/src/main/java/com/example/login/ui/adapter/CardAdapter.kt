@@ -10,8 +10,8 @@ import com.example.login.databinding.ItemCardBinding
 import com.example.login.domain.models.CardItem
 
 class CardAdapter(
-    private var items: MutableList<CardItem>, // ✅ MutableList para modificar la lista
-    private val onClick: (CardItem) -> Unit // 🔄 Ahora pasa el objeto completo en vez de la posición
+    private var items: MutableList<CardItem>,
+    private val onClick: (CardItem) -> Unit
 ) : RecyclerView.Adapter<CardAdapter.CardViewHolder>() {
 
     inner class CardViewHolder(private val binding: ItemCardBinding) :
@@ -20,9 +20,8 @@ class CardAdapter(
         fun bind(item: CardItem) {
             binding.cardName.text = item.name
             binding.cardDescription.text = item.description
-            binding.cardRating.text = "⭐ ${item.averageRating}" // ✅ Mostrar rating
+            binding.cardRating.text = "⭐ ${item.averageRating}"
 
-            // ✅ Decodificar la imagen base64
             if (!item.photo.isNullOrEmpty()) {
                 val bitmap = decodeBase64(item.photo)
                 if (bitmap != null) {
@@ -34,7 +33,6 @@ class CardAdapter(
                 binding.cardImage.setImageResource(android.R.drawable.ic_menu_gallery)
             }
 
-            // ✅ Manejar clic en la tarjeta
             binding.root.setOnClickListener {
                 onClick(item)
             }
@@ -56,7 +54,7 @@ class CardAdapter(
 
     fun removeItem(position: Int) {
         items.removeAt(position)
-        notifyItemRemoved(position) // 🔥 Notificar que un ítem fue eliminado
+        notifyItemRemoved(position)
     }
 
     override fun getItemCount(): Int = items.size
@@ -71,7 +69,7 @@ class CardAdapter(
 
     private fun decodeBase64(base64Str: String): Bitmap? {
         return try {
-            val base64Data = base64Str.substringAfter("base64,") // Elimina el prefijo "data:image/png;base64,"
+            val base64Data = base64Str.substringAfter("base64,")
             val decodedBytes = Base64.decode(base64Data, Base64.DEFAULT)
             BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
         } catch (e: Exception) {

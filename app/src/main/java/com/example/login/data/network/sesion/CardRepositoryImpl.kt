@@ -36,7 +36,7 @@ class CardRepositoryImpl @Inject constructor(
             val response = cardService.addCard(newCard)
             if (response.isSuccessful) {
                 response.body()?.let {
-                    Result.success(it)  // 🔹 Devuelve la card creada
+                    Result.success(it)
                 } ?: Result.failure(Exception("Error: Respuesta vacía"))
             } else {
                 Result.failure(Exception("Error: ${response.errorBody()?.string()}"))
@@ -51,7 +51,7 @@ class CardRepositoryImpl @Inject constructor(
             val response = cardService.deleteCard(cardId)
 
             if (response.isSuccessful) {
-                Result.success(Unit) // ✅ Eliminación exitosa
+                Result.success(Unit)
             } else {
                 Result.failure(Exception("Error al eliminar: ${response.errorBody()?.string()}"))
             }
@@ -73,6 +73,5 @@ class CardRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
-
 
 }

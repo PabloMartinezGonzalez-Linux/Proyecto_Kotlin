@@ -17,7 +17,6 @@ class CardLocalDataSource @Inject constructor(
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("CardsPrefs", Context.MODE_PRIVATE)
 
-    // Configura el parser de Kotlinx Serialization
     private val jsonParser = Json { ignoreUnknownKeys = true; prettyPrint = true }
 
     fun getCards(): List<CardItem> {

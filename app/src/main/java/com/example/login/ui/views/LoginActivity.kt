@@ -22,7 +22,6 @@ class LoginActivity : AppCompatActivity() {
         binding = LoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Observa el estado de autenticación
         viewModel.authState.observe(this) { state ->
             when (state) {
                 is AuthState.Loading -> {
@@ -34,10 +33,9 @@ class LoginActivity : AppCompatActivity() {
                     binding.progressBar.visibility = View.GONE
                     binding.loginButton.isEnabled = true
                     binding.registerButton.isEnabled = true
-                    // Navegar a la pantalla de tarjetas
                     val intent = Intent(this, Cardview::class.java)
                     startActivity(intent)
-                    binding.root.postDelayed({ finish() }, 300) // Evita cerrar antes de que se cargue la nueva pantalla
+                    binding.root.postDelayed({ finish() }, 300)
                 }
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE
@@ -59,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
-                loginButton.isEnabled = false // Deshabilitar botón para evitar spam de clics
+                loginButton.isEnabled = false
                 viewModel.login(username, pass)
             }
         }
@@ -68,14 +66,14 @@ class LoginActivity : AppCompatActivity() {
             binding.apply {
                 val username = usernameEditText.text.toString().trim()
                 val pass = passwordEditText.text.toString().trim()
-                val email = "$username@example.com" // 🔹 Se genera automáticamente a partir del username
+                val email = "$username@example.com"
 
                 if (username.isBlank() || pass.isBlank()) {
                     showAlert("Por favor, completa todos los campos.")
                     return@setOnClickListener
                 }
 
-                registerButton.isEnabled = false // Evitar clics repetidos
+                registerButton.isEnabled = false
                 viewModel.register(username, email, pass)
             }
         }

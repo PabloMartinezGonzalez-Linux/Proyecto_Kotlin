@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
             result.fold(
                 onSuccess = { token ->
                     Log.d("LoginViewModel", "Login exitoso, token recibido: $token")
-                    sessionManager.saveAuthToken(token)  // ✅ Guardar el token
+                    sessionManager.saveAuthToken(token)
                     _authState.value = AuthState.Success(token)
                 },
                 onFailure = { error ->
@@ -42,22 +42,22 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getToken(): String? {
-        return sessionManager.getAuthToken() // ✅ Obtener el token cuando sea necesario
+        return sessionManager.getAuthToken()
     }
 
     fun register(username: String, email: String, password: String) {
-        Log.d("LoginViewModel", "Registro iniciado con: username=$username, email=$email") // 🛠
+        Log.d("LoginViewModel", "Registro iniciado con: username=$username, email=$email")
         _authState.value = AuthState.Loading
         viewModelScope.launch {
             val result = registerUseCase.execute(username, email, password)
 
             result.fold(
                 onSuccess = {
-                    Log.d("LoginViewModel", "Registro exitoso") // 🛠
+                    Log.d("LoginViewModel", "Registro exitoso")
                     _authState.value = AuthState.Success("Registro exitoso")
                 },
                 onFailure = { error ->
-                    Log.e("LoginViewModel", "Error en registro: ${error.message}") // 🛠
+                    Log.e("LoginViewModel", "Error en registro: ${error.message}")
                     _authState.value = AuthState.Error(error.message ?: "Error desconocido")
                 }
             )
